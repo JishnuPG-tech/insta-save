@@ -3,24 +3,21 @@ package com.instasave.app.domain.usecase
 import com.instasave.app.domain.model.PostKind
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
+@RunWith(JUnit4::class)
 class ParseInstagramUrlUseCaseTest {
 
-    private lateinit var useCase: ParseInstagramUrlUseCase
-
-    @Before
-    fun setUp() {
-        useCase = ParseInstagramUrlUseCase()
-    }
+    private val useCase = ParseInstagramUrlUseCase()
 
     @Test
     fun testReelUrlParsing_Success() {
         val url = "https://www.instagram.com/reel/Cx4f2AbCdEf/?igsh=MXY="
         val result = useCase(url)
 
-        assertTrue(result.isSuccess)
+        assertTrue("Expected parsing success for reel URL", result.isSuccess)
         val parsed = result.getOrThrow()
         assertEquals(PostKind.REEL, parsed.kind)
         assertEquals("Cx4f2AbCdEf", parsed.shortcodeOrId)
@@ -32,7 +29,7 @@ class ParseInstagramUrlUseCaseTest {
         val url = "instagram.com/p/Cx4f2AbCdEf"
         val result = useCase(url)
 
-        assertTrue(result.isSuccess)
+        assertTrue("Expected parsing success for post URL", result.isSuccess)
         val parsed = result.getOrThrow()
         assertEquals(PostKind.POST, parsed.kind)
         assertEquals("Cx4f2AbCdEf", parsed.shortcodeOrId)
@@ -43,7 +40,7 @@ class ParseInstagramUrlUseCaseTest {
         val url = "https://instagram.com.evil.com/p/Cx4f2AbCdEf/"
         val result = useCase(url)
 
-        assertTrue(result.isFailure)
+        assertTrue("Host suffix attack should be rejected", result.isFailure)
     }
 
     @Test
@@ -51,7 +48,7 @@ class ParseInstagramUrlUseCaseTest {
         val url = "https://www.instagram.com/accounts/login/"
         val result = useCase(url)
 
-        assertTrue(result.isFailure)
+        assertTrue("Reserved path should be rejected", result.isFailure)
     }
 
     @Test
@@ -59,6 +56,6 @@ class ParseInstagramUrlUseCaseTest {
         val url = "https://youtube.com/watch?v=abc"
         val result = useCase(url)
 
-        assertTrue(result.isFailure)
+        assertTrue("Non-Instagram host should be rejected", result.isFailure)
     }
 }
