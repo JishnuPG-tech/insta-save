@@ -37,8 +37,9 @@ class ParseInstagramUrlUseCase @Inject constructor() {
         }
 
         // Validate domain host strictly (prevent host suffix attacks like instagram.com.evil.com)
-        val hostMatch = Regex("""https?://(?:www\.)?instagram\.com(?:/|$)""").find(candidateUrl)
+        val hostMatch = Regex("""^https?://(?:www\.|m\.)?instagram\.com(?:[:/]|$)""", RegexOption.IGNORE_CASE).find(candidateUrl)
             ?: return Result.failure(IllegalArgumentException("Invalid host: URL must belong to instagram.com"))
+
 
         // Strip tracking parameters
         candidateUrl = candidateUrl.replace(Regex("""\?(?:igsh|igshid|utm_[^&]+|hl)=[^&]*&?"""), "?")
