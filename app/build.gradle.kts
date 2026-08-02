@@ -22,10 +22,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        ndk {
-            abiFilters.addAll(setOf("arm64-v8a", "armeabi-v7a", "x86_64"))
-        }
     }
 
     buildTypes {
@@ -57,15 +53,8 @@ android {
         compose = true
         buildConfig = true
     }
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("arm64-v8a", "armeabi-v7a", "x86_64")
-            isUniversalApk = true
-        }
-    }
 }
+
 
 dependencies {
     implementation(libs.androidx.core.ktx)
