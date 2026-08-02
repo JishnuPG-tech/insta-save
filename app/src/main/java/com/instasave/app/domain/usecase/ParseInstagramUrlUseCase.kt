@@ -9,14 +9,15 @@ import javax.inject.Singleton
 class ParseInstagramUrlUseCase @Inject constructor() {
 
     private object IgPatterns {
-        val POST = Regex("""instagram\.com/(?:[\w.]+/)?p/([A-Za-z0-9_-]{5,20})""")
-        val REEL = Regex("""instagram\.com/(?:[\w.]+/)?reels?/([A-Za-z0-9_-]{5,20})""")
-        val IGTV = Regex("""instagram\.com/(?:[\w.]+/)?tv/([A-Za-z0-9_-]{5,20})""")
-        val STORY = Regex("""instagram\.com/stories/([\w.]+)/(?:(\d+))?""")
-        val HIGHLIGHT = Regex("""instagram\.com/stories/highlights/(\d+)""")
-        val PROFILE = Regex("""instagram\.com/([\w.]{1,30})/?$""")
-        val SHARE = Regex("""instagram\.com/share/([A-Za-z0-9_-]+)""")
+        val POST = Regex("""instagram\.com/(?:p/|[\w.]+/p/)([A-Za-z0-9_-]{5,20})""", RegexOption.IGNORE_CASE)
+        val REEL = Regex("""instagram\.com/(?:reels?/|[\w.]+/reels?/)([A-Za-z0-9_-]{5,20})""", RegexOption.IGNORE_CASE)
+        val IGTV = Regex("""instagram\.com/(?:tv/|[\w.]+/tv/)([A-Za-z0-9_-]{5,20})""", RegexOption.IGNORE_CASE)
+        val STORY = Regex("""instagram\.com/stories/([\w.]+)/(?:(\d+))?""", RegexOption.IGNORE_CASE)
+        val HIGHLIGHT = Regex("""instagram\.com/stories/highlights/(\d+)""", RegexOption.IGNORE_CASE)
+        val PROFILE = Regex("""instagram\.com/([\w.]{1,30})/?$""", RegexOption.IGNORE_CASE)
+        val SHARE = Regex("""instagram\.com/share/([A-Za-z0-9_-]+)""", RegexOption.IGNORE_CASE)
     }
+
 
     private val reservedWords = setOf(
         "p", "reel", "reels", "tv", "stories", "explore",
