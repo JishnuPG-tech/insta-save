@@ -45,7 +45,7 @@ class OkHttpProvider @Inject constructor(
                     .header("X-IG-App-ID", "936619743392459")
 
                 val cookieHeader = cookieStore.cookieHeader()
-                if (!cookieHeader.isNullEmpty()) {
+                if (!cookieHeader.isNullOrEmpty()) {
                     requestBuilder.header("Cookie", cookieHeader)
                 }
 

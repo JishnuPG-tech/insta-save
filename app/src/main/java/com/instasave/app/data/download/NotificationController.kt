@@ -46,7 +46,7 @@ class NotificationController @Inject constructor(
         speedText: String
     ): Notification {
         return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(android.R.drawable.ic_menu_save)
             .setContentTitle("Downloading: $title")
             .setContentText(speedText)
             .setProgress(100, progressPercent, progressPercent == 0)
@@ -57,7 +57,7 @@ class NotificationController @Inject constructor(
 
     fun notifyCompleted(title: String) {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(android.R.drawable.ic_menu_save)
             .setContentTitle("Download Complete")
             .setContentText(title)
             .setAutoCancel(true)

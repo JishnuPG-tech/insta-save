@@ -89,7 +89,7 @@ class YtDlpAndroidEngine @Inject constructor(
                         id = url.shortcodeOrId,
                         index = 0,
                         type = MediaType.VIDEO,
-                        thumbnailUrl = jsonObj.optString("thumbnail", null),
+                        thumbnailUrl = jsonObj.optString("thumbnail", ""),
                         width = formatsList.firstOrNull()?.width ?: 1080,
                         height = formatsList.firstOrNull()?.height ?: 1920,
                         formats = formatsList

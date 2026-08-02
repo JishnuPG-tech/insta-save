@@ -61,7 +61,7 @@ fun HomeScreen(
 
     // Handle initial shared URL from Intent Quick Share
     LaunchedEffect(initialSharedUrl) {
-        if (!initialSharedUrl.isNullEmpty()) {
+        if (!initialSharedUrl.isNullOrEmpty()) {
             viewModel.onEvent(HomeEvent.UrlInputChanged(initialSharedUrl))
             viewModel.onEvent(HomeEvent.ExtractClicked)
         }

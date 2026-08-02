@@ -35,7 +35,7 @@ class InstaNativeParser @Inject constructor(
             client.newCall(rung1Request).execute().use { response ->
                 if (response.isSuccessful) {
                     val bodyStr = response.body?.string()
-                    if (!bodyStr.isNullEmpty() && isNotLoginWall(bodyStr)) {
+                    if (!bodyStr.isNullOrEmpty() && isNotLoginWall(bodyStr)) {
                         val container = json.decodeFromString<IgMediaContainerDto>(bodyStr)
                         val item = container.items?.firstOrNull() ?: container.graphql?.shortcodeMedia
                         if (item != null) {
@@ -62,8 +62,8 @@ class InstaNativeParser @Inject constructor(
             client.newCall(rung2Request).execute().use { response ->
                 if (response.isSuccessful) {
                     val html = response.body?.string()
-                    if (!html.isNullEmpty()) {
-                        val doc = Jsoup.parse(html)
+                    if (!html.isNullOrEmpty()) {
+                        val doc = Jsoup.parse(html ?: "")
                         val videoElem = doc.select("video.EmbeddedMediaImage").firstOrNull()
                             ?: doc.select("video").firstOrNull()
                         val imageElem = doc.select("img.EmbeddedMediaImage").firstOrNull()
@@ -71,7 +71,7 @@ class InstaNativeParser @Inject constructor(
                         val videoUrl = videoElem?.attr("src")
                         val imageUrl = imageElem?.attr("src")
 
-                        if (!videoUrl.isNullEmpty() || !imageUrl.isNullEmpty()) {
+                        if (!videoUrl.isNullOrEmpty() || !imageUrl.isNullOrEmpty()) {
                             // Synthesize minimal DTO from embed HTML
                             val captionText = doc.select(".Caption").text()
                             val username = doc.select(".Username").text().ifEmpty { "instagram_user" }
@@ -79,9 +79,9 @@ class InstaNativeParser @Inject constructor(
                             val mockItem = com.instasave.app.data.extractor.dto.IgItemDto(
                                 id = shortcode,
                                 code = shortcode,
-                                isVideo = !videoUrl.isNullEmpty(),
-                                videoVersions = if (!videoUrl.isNullEmpty()) listOf(com.instasave.app.data.extractor.dto.IgVideoVersionDto(url = videoUrl, width = 1080, height = 1920)) else null,
-                                imageVersions = if (!imageUrl.isNullEmpty()) com.instasave.app.data.extractor.dto.IgImageContainerDto(listOf(com.instasave.app.data.extractor.dto.IgImageCandidateDto(url = imageUrl, width = 1080, height = 1080))) else null,
+                                isVideo = !videoUrl.isNullOrEmpty(),
+                                videoVersions = if (!videoUrl.isNullOrEmpty()) listOf(com.instasave.app.data.extractor.dto.IgVideoVersionDto(url = videoUrl, width = 1080, height = 1920)) else null,
+                                imageVersions = if (!imageUrl.isNullOrEmpty()) com.instasave.app.data.extractor.dto.IgImageContainerDto(listOf(com.instasave.app.data.extractor.dto.IgImageCandidateDto(url = imageUrl, width = 1080, height = 1080))) else null,
                                 captionObj = com.instasave.app.data.extractor.dto.IgCaptionDto(text = captionText),
                                 user = com.instasave.app.data.extractor.dto.IgUserDto(username = username)
                             )
@@ -117,7 +117,7 @@ class InstaNativeParser @Inject constructor(
 
     private fun isLoginWall(finalUrl: String, body: String?): Boolean {
         if (finalUrl.contains("/accounts/login/")) return true
-        if (body.isNullEmpty()) return false
+        if (body.isNullOrEmpty()) return false
         return body.contains("login_required") || body.contains("loginForm")
     }
 
